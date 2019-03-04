@@ -206,7 +206,7 @@ bot.loadStats=function(){
                 }
             });
         });
-        console.log(jogos_mb_relacionados);
+        //console.log(jogos_mb_relacionados);
         bot.fazApostas(jogos_mb_relacionados);
     });
 
@@ -239,32 +239,19 @@ bot.fazApostas=function(jogos_mb){
         var mod0=Number(this.goal % 1===0);
 
         var pl_u=(-0.0222 * s_g +     -0.0049 * s_c +     -0.0002 * s_da +     -0.0063 * s_s +     -0.0217 * d_g +     -0.0028 * d_s +      0.0166 * goal +      0.0557 * goal_diff +      0.0755 * oddsU +     -0.4233 * probU_diff +      0.0185 * mod0 +     -0.14)>0 ?  -0.139  * s_g +     -0.0064 * s_c +     -0.0006 * s_da +     -0.0056 * s_s +     -0.0398 * d_g +     -0.0044 * d_s +      0.1356 * goal +     -0.0302 * goal_diff +      0.1305 * oddsU +     -0.8786 * probU_diff +     -0.2414 : -1;
-        console.log(pl_u);
-        if(pl_u>=CONFIG.min && !bot.jaFoiApostado(this.mid_under, 'Total Goals') )  bot.placeBet(obj_under, stakeUnder(pl_u,mod0,oddsU) );
+        //console.log(pl_u);
+        if(pl_u>=CONFIG.min && !bot.jaFoiApostado(this.mid_under, 'Total Goals') )  bot.placeBet(this.obj_under, bot.stakeUnder(pl_u,mod0,oddsU) );
 
     });
 };
 
 
 
-
-
-
-
-
-
-
 bot.loop=function(){
-
     bot.preparaPagina();
-
     bot.mybets.clearBets();
-
     if( bot.login.checkLogin() ) bot.login.doLogin();
-
     bot.loadStats();
 };
 
-
 bot.init();
-
