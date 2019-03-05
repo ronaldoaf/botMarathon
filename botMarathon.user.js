@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BotMarathon
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.1.2
 // @description  try to take over the world!
 // @author       You
 // @require      https://cdn.jsdelivr.net/gh/ronaldoaf/bot1x@d90bffb0805ed7fff098944bd003cb322d0e3493/auxiliar.min.js?
@@ -60,10 +60,10 @@ bot.mybets={
           mybets_list.push(bet);
           localStorage.bot_mybets_list=JSON.stringify(mybets_list);
      },
-    getBets: function(mid,type){
+    getBets: function(mid){
         var bets=[];
         $(bot.mybets.listBets()).each(function(){
-            if(this.mid==mid && this.type==type) bets.push(this);
+            if(this.mid==mid) bets.push(this);
         });
         return bets;
     },
@@ -139,8 +139,8 @@ bot.placeBet=function(obj, stake){
     });
 }
 
-bot.jaFoiApostado=function(mid, type){
-      return (bot.mybets.getBets(mid, type).length>0);
+bot.jaFoiApostado=function(mid){
+      return (bot.mybets.getBets(mid).length>0);
 };
 
 bot.getBalance=function(){
@@ -182,8 +182,8 @@ bot.loadStats=function(){
             var key=$(this).find("[data-selection-key*='Under']:eq(0)").attr('data-selection-key');
            if ( $(this).find('.time-description').text().trim()=='HT' && key!==undefined){
                var score=$(this).find('.event-description').text().trim().split(' ')[0].split(':');
-               var obj_under=$(this).find('[data-selection-price]:eq(0)');
-               var obj_over=$(this).find('[data-selection-price]:eq(1)');
+               var obj_under=$(this).find("[data-selection-key*='Under']");
+               var obj_over=$(this).find("[data-selection-key*='Over']");
                jogos_mb.push({
                    home_vs_away: $(this).attr('data-event-name'),
                    gh: Number(score[0]),
@@ -201,7 +201,7 @@ bot.loadStats=function(){
         var jogos_mb_relacionados=[];
         $(jogos_tc).each(function(i,jtc){
             $(jogos_mb).each(function(j,jmb){
-                if(jtc.gh==jmb.gh && jtc.ga==jmb.ga && rel_mb_tc(jmb,jtc)>=66){
+                if(jtc.gh==jmb.gh && jtc.ga==jmb.ga && rel_mb_tc(jmb,jtc)>=CORTE_REL){
                     jmb.jogo_tc=jtc;
                     jogos_mb_relacionados.push(jmb);
                 }
@@ -241,7 +241,7 @@ bot.fazApostas=function(jogos_mb){
 
         var pl_u=(-0.0222 * s_g +     -0.0049 * s_c +     -0.0002 * s_da +     -0.0063 * s_s +     -0.0217 * d_g +     -0.0028 * d_s +      0.0166 * goal +      0.0557 * goal_diff +      0.0755 * oddsU +     -0.4233 * probU_diff +      0.0185 * mod0 +     -0.14)>0 ?  -0.139  * s_g +     -0.0064 * s_c +     -0.0006 * s_da +     -0.0056 * s_s +     -0.0398 * d_g +     -0.0044 * d_s +      0.1356 * goal +     -0.0302 * goal_diff +      0.1305 * oddsU +     -0.8786 * probU_diff +     -0.2414 : -1;
         //console.log(pl_u);
-        if(pl_u>=CONFIG.min && !bot.jaFoiApostado(this.mid_under, 'Total Goals') )  bot.placeBet(this.obj_under, bot.stakeUnder(pl_u,mod0,oddsU) );
+        if(pl_u>=CONFIG.min && !bot.jaFoiApostado(this.mid_under) )  bot.placeBet(this.obj_under, bot.stakeUnder(pl_u,mod0,oddsU) );
 
     });
 };
