@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BotMarathon
 // @namespace    http://tampermonkey.net/
-// @version      0.1.2
+// @version      0.1.3
 // @description  try to take over the world!
 // @author       You
 // @require      https://cdn.jsdelivr.net/gh/ronaldoaf/bot1x@d90bffb0805ed7fff098944bd003cb322d0e3493/auxiliar.min.js?
@@ -241,8 +241,10 @@ bot.fazApostas=function(jogos_mb){
 
         var pl_u=(-0.0222 * s_g +     -0.0049 * s_c +     -0.0002 * s_da +     -0.0063 * s_s +     -0.0217 * d_g +     -0.0028 * d_s +      0.0166 * goal +      0.0557 * goal_diff +      0.0755 * oddsU +     -0.4233 * probU_diff +      0.0185 * mod0 +     -0.14)>0 ?  -0.139  * s_g +     -0.0064 * s_c +     -0.0006 * s_da +     -0.0056 * s_s +     -0.0398 * d_g +     -0.0044 * d_s +      0.1356 * goal +     -0.0302 * goal_diff +      0.1305 * oddsU +     -0.8786 * probU_diff +     -0.2414 : -1;
         //console.log(pl_u);
-        if(pl_u>=CONFIG.min && !bot.jaFoiApostado(this.mid_under) )  bot.placeBet(this.obj_under, bot.stakeUnder(pl_u,mod0,oddsU) );
-
+        if(pl_u>=CONFIG.min && !bot.jaFoiApostado(this.mid_under) )  {
+            bot.placeBet(this.obj_under, bot.stakeUnder(pl_u,mod0,oddsU) );
+            return false;
+        }
     });
 };
 
